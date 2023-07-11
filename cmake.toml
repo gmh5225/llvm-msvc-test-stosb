@@ -6,3 +6,4 @@ name = "llvm-msvc-test-stosb"
 type = "executable"
 sources = ["src/main.cpp"]
 compile-features = ["cxx_std_20"]
+compile-options = ["-fauto-generate-ir"]

@@ -41,6 +41,10 @@ target_compile_features(test PRIVATE
 	cxx_std_20
 )
 
+target_compile_options(test PRIVATE
+	-fauto-generate-ir
+)
+
 get_directory_property(CMKR_VS_STARTUP_PROJECT DIRECTORY ${PROJECT_SOURCE_DIR} DEFINITION VS_STARTUP_PROJECT)
 if(NOT CMKR_VS_STARTUP_PROJECT)
 	set_property(DIRECTORY ${PROJECT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT test)
