@@ -24,28 +24,63 @@ __declspec(noinline) void my__stosb(unsigned char *__dst, unsigned char __src, s
     //__stosb((unsigned char *)__dst, __src, __n);
 }
 
+__declspec(noinline) void my__stosw(unsigned short *Dest, unsigned short Data, size_t Count)
+{
+    __asm__ __volatile__("rep stosw"
+                         : [Dest] "=D"(Dest), [Count] "=c"(Count)
+                         : "[Dest]"(Dest), "a"(Data), "[Count]"(Count));
+}
+
 int
 main()
 {
     std::cout << "Hello from cmkr!\n";
-    char sz[10] = {0};
-    // my__stosb((unsigned char *)sz, 'a', 10);
-    size_t __n = 10;
-    unsigned char *__dst = (unsigned char *)sz;
-    unsigned char __src = 'a';
-    //__asm__ __volatile__("rep stosb" : "+D"(__dst), "+c"(__n) : "a"(__src) : "memory");
-    /*
-    .text:0000000140001048                 lea     rdi, [rsp+48h+var_28]
-    .text:000000014000104D                 mov     ecx, 0Ah
-    .text:0000000140001052                 mov     al, 61h ; 'a'
-    .text:0000000140001054                 rep stosb
-    */
 
-    __stosb(__dst, __src, __n);
-
-    for (int i = 0; i < 10; ++i)
     {
-        printf("a[%d]=%c\n", i, sz[i]);
+        char sz[10] = {0};
+        // my__stosb((unsigned char *)sz, 'a', 10);
+        size_t __n = 10;
+        unsigned char *__dst = (unsigned char *)sz;
+        unsigned char __src = 'a';
+        //__asm__ __volatile__("rep stosb" : "+D"(__dst), "+c"(__n) : "a"(__src) : "memory");
+        /*
+        .text:0000000140001048                 lea     rdi, [rsp+48h+var_28]
+        .text:000000014000104D                 mov     ecx, 0Ah
+        .text:0000000140001052                 mov     al, 61h ; 'a'
+        .text:0000000140001054                 rep stosb
+        */
+
+        __stosb(__dst, __src, __n);
+
+        for (int i = 0; i < 10; ++i)
+        {
+            printf("a[%d]=%c\n", i, sz[i]);
+        }
+        printf("----------------------\n");
     }
+
+    {
+        unsigned short sz[10] = {0};
+        // my__stosb((unsigned char *)sz, 'a', 10);
+        size_t __n = 10;
+        unsigned short *__dst = (unsigned short *)sz;
+        unsigned short __src = 0xaabb;
+        //__asm__ __volatile__("rep stosb" : "+D"(__dst), "+c"(__n) : "a"(__src) : "memory");
+        /*
+        .text:0000000140001048                 lea     rdi, [rsp+48h+var_28]
+        .text:000000014000104D                 mov     ecx, 0Ah
+        .text:0000000140001052                 mov     al, 61h ; 'a'
+        .text:0000000140001054                 rep stosb
+        */
+
+        __stosw(__dst, __src, __n);
+
+        for (int i = 0; i < 10; ++i)
+        {
+            printf("a[%d]=%x\n", i, sz[i]);
+        }
+        printf("----------------------\n");
+    }
+
     return 0;
 }
