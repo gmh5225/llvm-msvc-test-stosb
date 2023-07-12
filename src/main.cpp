@@ -1,5 +1,5 @@
 #include <iostream>
-
+// #include <intrin.h>
 /*
 ; Function Attrs: mustprogress noinline nounwind null_pointer_is_valid sspstrong uwtable
 define dso_local void @"?my__stosb@@YAXPEAEE_K@Z"(ptr noundef %0, i8 noundef %1, i64 noundef %2) #0 {
@@ -61,23 +61,39 @@ main()
 
     {
         unsigned short sz[10] = {0};
-        // my__stosb((unsigned char *)sz, 'a', 10);
         size_t __n = 10;
         unsigned short *__dst = (unsigned short *)sz;
         unsigned short __src = 0xaabb;
-        //__asm__ __volatile__("rep stosb" : "+D"(__dst), "+c"(__n) : "a"(__src) : "memory");
-        /*
-        .text:0000000140001048                 lea     rdi, [rsp+48h+var_28]
-        .text:000000014000104D                 mov     ecx, 0Ah
-        .text:0000000140001052                 mov     al, 61h ; 'a'
-        .text:0000000140001054                 rep stosb
-        */
-
         __stosw(__dst, __src, __n);
-
         for (int i = 0; i < 10; ++i)
         {
             printf("a[%d]=%x\n", i, sz[i]);
+        }
+        printf("----------------------\n");
+    }
+
+    {
+        unsigned long sz[10] = {0};
+        size_t __n = 10;
+        unsigned long *__dst = (unsigned long *)sz;
+        unsigned long __src = 0xaabbccdd;
+        __stosd(__dst, __src, __n);
+        for (int i = 0; i < 10; ++i)
+        {
+            printf("a[%d]=%x\n", i, sz[i]);
+        }
+        printf("----------------------\n");
+    }
+
+    {
+        unsigned long long sz[10] = {0};
+        size_t __n = 10;
+        unsigned long long *__dst = (unsigned long long *)sz;
+        unsigned long long __src = 0xaabbccddeeff0022;
+        __stosq(__dst, __src, __n);
+        for (int i = 0; i < 10; ++i)
+        {
+            printf("a[%d]=%llx\n", i, sz[i]);
         }
         printf("----------------------\n");
     }
