@@ -1,5 +1,5 @@
 #include <iostream>
-// #include <intrin.h>
+#include <intrin.h>
 /*
 ; Function Attrs: mustprogress noinline nounwind null_pointer_is_valid sspstrong uwtable
 define dso_local void @"?my__stosb@@YAXPEAEE_K@Z"(ptr noundef %0, i8 noundef %1, i64 noundef %2) #0 {
@@ -18,22 +18,26 @@ ptr %11, ptr %6, align 8 store i64 %12, ptr %4, align 8 ret void
 }
 */
 
-__declspec(noinline) void my__stosb(unsigned char *__dst, unsigned char __src, size_t __n)
-{
-    __asm__ __volatile__("rep stosb" : "+D"(__dst), "+c"(__n) : "a"(__src) : "memory");
-    //__stosb((unsigned char *)__dst, __src, __n);
-}
-
-__declspec(noinline) void my__stosw(unsigned short *Dest, unsigned short Data, size_t Count)
-{
-    __asm__ __volatile__("rep stosw"
-                         : [Dest] "=D"(Dest), [Count] "=c"(Count)
-                         : "[Dest]"(Dest), "a"(Data), "[Count]"(Count));
-}
+//__declspec(noinline) void my__stosb(unsigned char *__dst, unsigned char __src, size_t __n)
+//{
+//    __asm__ __volatile__("rep stosb" : "+D"(__dst), "+c"(__n) : "a"(__src) : "memory");
+//    //__stosb((unsigned char *)__dst, __src, __n);
+//}
+//
+//__declspec(noinline) void my__stosw(unsigned short *Dest, unsigned short Data, size_t Count)
+//{
+//    __asm__ __volatile__("rep stosw"
+//                         : [Dest] "=D"(Dest), [Count] "=c"(Count)
+//                         : "[Dest]"(Dest), "a"(Data), "[Count]"(Count));
+//}
 
 int
 main()
 {
+    //__readgsqword
+    //__MACHINEX64(unsigned __int64 __readgsqword(unsigned long))
+    // TARGET_HEADER_BUILTIN(__readgsqword, "ULLiUNi", "nh", INTRIN_H, ALL_MS_LANGUAGES, "")
+
     std::cout << "Hello from cmkr!\n";
 
     {
@@ -42,6 +46,8 @@ main()
         size_t __n = 10;
         unsigned char *__dst = (unsigned char *)sz;
         unsigned char __src = 'a';
+        // ptrdiff_t
+        //__readcr0
         //__asm__ __volatile__("rep stosb" : "+D"(__dst), "+c"(__n) : "a"(__src) : "memory");
         /*
         .text:0000000140001048                 lea     rdi, [rsp+48h+var_28]
@@ -90,7 +96,7 @@ main()
         size_t __n = 10;
         unsigned long long *__dst = (unsigned long long *)sz;
         unsigned long long __src = 0xaabbccddeeff0022;
-        __stosq(__dst, __src, __n);
+        //__stosq(__dst, __src, __n);
         for (int i = 0; i < 10; ++i)
         {
             printf("a[%d]=%llx\n", i, sz[i]);
@@ -98,5 +104,54 @@ main()
         printf("----------------------\n");
     }
 
+    // test cr0
+    {
+        auto x = __readcr0();
+        __writecr0(x);
+        printf("__readcr0=%p\n", x);
+        printf("----------------------\n");
+    }
+
+    // test cr2
+    {
+        auto x = __readcr2();
+        __writecr2(x);
+        printf("__readcr2=%p\n", x);
+        printf("----------------------\n");
+    }
+
+    // test cr3
+    {
+        auto x = __readcr3();
+        __writecr3(x);
+        printf("__readcr3=%p\n", x);
+        printf("----------------------\n");
+    }
+
+    // test cr4
+    {
+        auto x = __readcr4();
+        __writecr4(x);
+        printf("__readcr4=%p\n", x);
+        printf("----------------------\n");
+    }
+
+#ifdef _WIN64
+    // test cr8
+    {
+        auto x = __readcr8();
+        printf("__readcr8=%p\n", x);
+        printf("----------------------\n");
+    }
+#endif
+    // test dr0
+    {
+        int idx = 0;
+        scanf("%d", &idx);
+        auto x = __readdr(idx);
+        __writedr(idx, x);
+        printf("__readdr0=%p\n", x);
+        printf("----------------------\n");
+    }
     return 0;
 }
